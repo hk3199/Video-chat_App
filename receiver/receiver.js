@@ -6,14 +6,26 @@ webSocket.onmessage = (event) => {
 
 function handleSignallingData(data) {
     switch (data.type) {
-        case "answer":
-            peerConn.setRemoteDescription(data.answer)
+        case "offer":
+            peerConn.setRemoteDescription(data.offer)
+            createAndSendAnswer()
             break
         case "candidate":
             peerConn.addIceCandidate(data.candidate)
     }
 }
 
+function createAndSendAnswer(){
+    peer.createAnswer((answer)=>{
+        peer.setLocalDescription(answer)
+        sendName({
+            type:"send_answer",
+            answer:answer
+        })
+    }, (error) =>{
+             console.log(error)
+    })
+}
 
 let sender
 
@@ -49,7 +61,7 @@ function JoinMeet(){
                 }
             ]
         }
-        
+
      peer= new RTCPeerConnection(configure)
      peer.addStream(myVideo)
  
@@ -67,9 +79,10 @@ function JoinMeet(){
          })
 
     })
-      
-
-       
+          sendName({
+              type: "join_meet"
+          })
+    
     }, (error)=>{
         console.log(error)
     })
