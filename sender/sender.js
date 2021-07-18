@@ -67,7 +67,7 @@ function starter(){
          return
 
          sendName({
-             type: " candidate",
+             type: " store_candidate",
              candidate: e.candidate
          })
 
