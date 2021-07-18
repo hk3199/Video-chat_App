@@ -92,7 +92,17 @@ function starter(){
         })
     }
 
+    let MuteAudio= true
+    function AudioControl(){
+      MuteAudio= false
+      localStream.getAudioTracks()[0].enabled=  MuteAudio
+    }
    
-
+    let MuteVideo= true
+    function VideoControl(){
+        MuteVideo=false
+        localStream.getAudioTracks()[0].enabled= MuteVideo
+    }
+  
 
 
