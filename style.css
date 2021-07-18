@@ -31,4 +31,10 @@
      left: 30px;
      position: absolute;
 }
+#audio-mute{
+    bottom: 10px;
+    left: 10 px;
+    position: right;
+    
+}
 
