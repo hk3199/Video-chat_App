@@ -34,7 +34,7 @@
 #audio-mute{
     bottom: 10px;
     left: 10 px;
-    position: right;
+    position: absolute;
     
 }
 
