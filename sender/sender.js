@@ -1,5 +1,19 @@
 const webSocket= new WebSocket("ws://localhost:3000/")
 
+webSocket.onmessage = (event) => {
+    handleSignallingData(JSON.parse(event.data))
+}
+
+function handleSignallingData(data) {
+    switch (data.type) {
+        case "answer":
+            peerConn.setRemoteDescription(data.answer)
+            break
+        case "candidate":
+            peerConn.addIceCandidate(data.candidate)
+    }
+}
+
 
 let sender
 function username(){
@@ -15,9 +29,11 @@ function sendName(data){
 
 }
 let localStream
-
+let peer
 function starter(){
+
     document.getElementById("video-screen").style.display="inline"
+
     navigator.getUserMedia({
         video: {
             frameRate: 24,
@@ -31,24 +47,52 @@ function starter(){
         localStream=stream
         document.getElementById("myVideo").srcObject = localStream
 
+        let configure={
+            iceServers:[
+                {
+                   
+                }
+            ]
+        }
+        
+     peer= new RTCPeerConnection(configure)
+     peer.addStream(myVideo)
+ 
+     peer.onaddstream=(e)=> {
+     document.getElementById("YourVideo").srcObject = e.stream
+     }
+
+    peer.onicecandidate = ((e) => {
+        if(e.candidate==null)
+         return
+
+         sendName({
+             type: " candidate",
+             candidate: e.candidate
+         })
+
+    })
+      
+
+       createAndSendOffer()
     }, (error)=>{
         console.log(error)
     })
-  
-    let configure={
-        iceServers:[
-            {
-
-            }
-        ]
-    }
-     peer= RTCPeerConnection(configure)
-    peer.addStream(myVideo)
-
-    peer.onaddstream=(e)=> {
-    document.getElementById("remote-video")
-    .srcObject = e.stream
-    }
-
 }
+    function createAndSendOffer(){
+        peer.createOffer((offer) => {
+            sendName({
+                type:"store_offer",
+                offer:offer
+            })
+            peer.setLocalDescription(offer)
+      
+        },  (error) => {
+             console.log(error)
+        })
+    }
+
+   
+
+
 
