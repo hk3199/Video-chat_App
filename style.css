@@ -19,22 +19,13 @@
 }
 
 #YourVideo{
-    top: 0;
-    left: 0;
     height: 100%;
     width: 100%;
     background: black;
 }
 
-#video-mute{
+#options{
      bottom: 10px;
      left: 80px;
      position: absolute;
 }
-#audio-mute{
-    bottom: 10px;
-    left: 10px;
-    position: absolute;
-    
-}
-
