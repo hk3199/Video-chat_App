@@ -44,14 +44,14 @@ function starter(){
             aspectRatio: 1.33333
         },
         audio: true
-    }, (stream)=>{
-        localStream=stream
+    }, (stream) => {
+        localStream = stream
         document.getElementById("myVideo").srcObject = localStream
 
-        let configure={
-            iceServers:[
+        let configure = {
+            iceServers: [
                 {
-                      'urls': 'stun:stun.l.google.com:19302' 
+                    "urls": ["stun:stun.l.google.com:19302"]
                 }
             ]
         }
