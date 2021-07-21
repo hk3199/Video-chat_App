@@ -52,7 +52,7 @@ function JoinMeet(){
         audio: true
     }, (stream) => {
         localStream = stream
-        document.getElementById("local-video").srcObject = localStream
+        document.getElementById("YourVideo").srcObject = localStream
 
         let configure = {
             iceServers: [
