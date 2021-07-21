@@ -1,4 +1,4 @@
-const webSocket= new WebSocket("ws://localhost:3000")
+const webSocket= new WebSocket("ws://127.0.0.1:3000")
 
 webSocket.onmessage = (event) => {
     handleSignallingData(JSON.parse(event.data))
@@ -7,11 +7,11 @@ webSocket.onmessage = (event) => {
 function handleSignallingData(data) {
     switch (data.type) {
         case "offer":
-            peerConn.setRemoteDescription(data.offer)
+            peer.setRemoteDescription(data.offer)
             createAndSendAnswer()
             break
         case "candidate":
-            peerConn.addIceCandidate(data.candidate)
+            peer.addIceCandidate(data.candidate)
     }
 }
 
@@ -57,15 +57,13 @@ function JoinMeet(){
         let configure={
             iceServers:[
                 {
-                    "urls": ["stun:stun.l.google.com:19302", 
-                    "stun:stun1.l.google.com:19302", 
-                    "stun:stun2.l.google.com:19302"]
+                    'urls': 'stun:stun.l.google.com:19302' 
                 }
             ]
         }
 
      peer= new RTCPeerConnection(configure)
-     peer.addStream(myVideo)
+     peer.addStream(localStream)
  
      peer.onaddstream=(e)=> {
      document.getElementById("YourVideo").srcObject = e.stream
@@ -89,18 +87,20 @@ function JoinMeet(){
         console.log(error)
     })
 }
-    
-    let MuteAudio= true
-    function AudioControl(){
-      MuteAudio= false
-      localStream.getAudioTracks()[0].enabled=  MuteAudio
-    }
-   
-    let MuteVideo= true
-    function VideoControl(){
-        MuteVideo=false
-        localStream.getAudioTracks()[0].enabled= MuteVideo
-    }
-  
+
+
+let MuteAudio= true
+function AudioControl(){
+  MuteAudio= !MuteAudio
+  localStream.getAudioTracks()[0].enabled=  !(localStream.getAudioTracks()[0].enabled);
+}
+
+let MuteVideo= true
+function VideoControl(){
+    MuteVideo=!MuteVideo
+    console.log(MuteAudio);
+    localStream.getAudioTracks()[0].enabled= !(localStream.getAudioTracks()[0].enabled);
+}
+
 
 
