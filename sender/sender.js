@@ -102,6 +102,7 @@ function starter(){
     let MuteVideo= true
     function VideoControl(){
         MuteVideo=!MuteVideo
-        localStream.getAudioTracks()[0].enabled=!(localStream.getAudioTracks()[0].enabled);
+        console.log(MuteVideo);
+        localStream.getAudioTracks()[0].enabled=MuteVideo;
     }
   

@@ -50,31 +50,32 @@ function JoinMeet(){
             aspectRatio: 1.33333
         },
         audio: true
-    }, (stream)=>{
-        localStream=stream
-        document.getElementById("myVideo").srcObject = localStream
+    }, (stream) => {
+        localStream = stream
+        document.getElementById("local-video").srcObject = localStream
 
-        let configure={
-            iceServers:[
+        let configure = {
+            iceServers: [
                 {
-                    'urls': 'stun:stun.l.google.com:19302' 
+                    "urls": ["stun:stun.l.google.com:19302"]
                 }
             ]
         }
 
+
      peer= new RTCPeerConnection(configure)
      peer.addStream(localStream)
  
-     peer.onaddstream=(e)=> {
+     peer.onaddstream=((e)=> {
      document.getElementById("YourVideo").srcObject = e.stream
-     }
+     })
 
     peer.onicecandidate = ((e) => {
         if(e.candidate==null)
          return
 
          sendName({
-             type: " send_candidate",
+             type: "send_candidate",
              candidate: e.candidate
          })
 
@@ -99,8 +100,7 @@ let MuteVideo= true
 function VideoControl(){
     MuteVideo=!MuteVideo
     console.log(MuteAudio);
-    localStream.getAudioTracks()[0].enabled= !(localStream.getAudioTracks()[0].enabled);
-}
+    localStream.getAudioTracks()[0].enabled= MuteVideo; }
 
 
 
