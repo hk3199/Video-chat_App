@@ -17,7 +17,7 @@ webSocket.on('request', (req) => {
     connection.on('message', (message) => {
         const data = JSON.parse(message.utf8Data)
 
-        const user = findUser(data.username)
+        const user = findUser(data.sender)
 
         switch(data.type) {
             case "store_user":
@@ -28,11 +28,11 @@ webSocket.on('request', (req) => {
 
                 const newUser = {
                      conn: connection,
-                     username: data.username
+                     sender: data.sender
                 }
 
                 users.push(newUser)
-                console.log(newUser.username)
+                console.log(newUser.sender)
                 break
             case "store_offer":
                 if (user == null)
@@ -54,7 +54,7 @@ webSocket.on('request', (req) => {
                     return
                 }
 
-                sendData({
+                sendName({
                     type: "answer",
                     answer: data.answer
                 }, user.conn)
@@ -64,23 +64,23 @@ webSocket.on('request', (req) => {
                     return
                 }
 
-                sendData({
+                sendName({
                     type: "candidate",
                     candidate: data.candidate
                 }, user.conn)
                 break
-            case "join_call":
+            case "join_meet":
                 if (user == null) {
                     return
                 }
 
-                sendData({
+                sendName({
                     type: "offer",
                     offer: user.offer
                 }, connection)
                 
                 user.candidates.forEach(candidate => {
-                    sendData({
+                    sendName({
                         type: "candidate",
                         candidate: candidate
                     }, connection)
@@ -100,13 +100,13 @@ webSocket.on('request', (req) => {
     })
 })
 
-function sendData(data, conn) {
+function sendName(data, conn) {
     conn.send(JSON.stringify(data))
 }
 
-function findUser(username) {
+function findUser(sender) {
     for (let i = 0;i < users.length;i++) {
-        if (users[i].username == username)
+        if (users[i].sender == sender)
             return users[i]
     }
 }
